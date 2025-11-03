@@ -93,7 +93,7 @@ grids:
 globals:
   cache:
     redis:
-      host: ${MAPPROXY_REDIS_HOST:-redis}
-      port: ${MAPPROXY_REDIS_PORT:-6379}
-      username: ${MAPPROXY_REDIS_USERNAME:-mapproxy}
-      password: ${MAPPROXY_REDIS_PASSWORD:-mapproxy_password}
+      host: $MAPPROXY_REDIS_HOST
+      port: $MAPPROXY_REDIS_PORT
+      username: $MAPPROXY_REDIS_USERNAME
+      password: $MAPPROXY_REDIS_PASSWORD
