@@ -1,0 +1,99 @@
+# --------------------------------------------------------------
+# MapProxy configuration for Svalbard Weather Information (SWI)
+# --------------------------------------------------------------
+#
+#
+# This configuration sets up MapProxy to serve and cache the following layers:
+# - Latest Sea Ice Chart from MET Norway (redis cached, 10 min TTL)
+# - Slope Steepness from NVE (file cached)
+# - Runout Area from NVE (file cached)
+
+
+
+services:
+  demo:
+  wmts:
+
+layers:
+  - name: met_icechart
+    title: Latest Ice Chart
+    sources: [icechart_cache]
+    wmts_rest_legendurl: "{base_url}/metadata/{layer_name}/legend.html"
+    md:
+        title: Latest Sea Ice Chart
+        abstract: Latest sea ice chart provided by MET Norway.
+
+  - name: nve_slope_steepness
+    title: Slope Steepness
+    sources: [slope_steepness_cache]
+    md:
+      title: Slope Steepness
+      abstract: Slope steepness data provided by NVE as displayed on Varsom RegObs.
+
+  - name: nve_runout_area
+    title: Runout Area
+    sources: [nve_runout_area_cache]
+    md:
+      title: Runout Area
+      abstract: Runout area data provided by NVE as displayed on Varsom RegObs.
+
+caches:
+  icechart_cache:
+    grids: [webmercator]
+    sources: [icechart]
+    type: redis
+    default_ttl: 600
+
+  slope_steepness_cache:
+    grids: [webmercator]
+    sources: [nve_slope_steepness]
+
+  nve_runout_area_cache:
+    grids: [webmercator]
+    sources: [nve_runout_short]
+
+sources:
+  icechart:
+    type: mapnik
+    mapfile: /mapproxy/data/latest_seaice/latest.xml
+    layers: latest_ice_chart
+    transparent: true
+    multithreaded: true
+
+  nve_slope_steepness:
+    type: wms
+    req:
+      url: https://gis3.nve.no/arcgis/services/wmts/Bratthet_med_utlop_2024/MapServer/WMSServer?
+      layers: 4
+      versions: 1.3.0
+      transparent: true
+      format: image/png
+    on_error:
+      500:
+        response: transparent
+        cache: False
+
+  nve_runout_short:
+    type: wms
+    req:
+      url: https://gis3.nve.no/arcgis/services/wmts/Bratthet_med_utlop_2024/MapServer/WMSServer?
+      layers: 1,2,3
+      versions: 1.3.0
+      transparent: true
+      format: image/png
+    on_error:
+      500:
+        response: transparent
+        cache: False
+
+grids:
+    webmercator:
+        base: GLOBAL_WEBMERCATOR    
+
+globals:
+  cache:
+    redis:
+      host: ${MAPPROXY_REDIS_HOST:-redis}
+      port: ${MAPPROXY_REDIS_PORT:-6379}
+      username: ${MAPPROXY_REDIS_USERNAME:-mapproxy}
+      password: ${MAPPROXY_REDIS_PASSWORD:-mapproxy_password}
