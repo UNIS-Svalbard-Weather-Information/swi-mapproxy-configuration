@@ -20,21 +20,20 @@ layers:
     sources: [icechart_cache]
     wmts_rest_legendurl: "{base_url}/metadata/{layer_name}/legend.html"
     md:
-        title: Latest Sea Ice Chart
         abstract: Latest sea ice chart provided by MET Norway.
 
   - name: nve_slope_steepness
     title: Slope Steepness
     sources: [slope_steepness_cache]
+    wmts_rest_legendurl: "{base_url}/metadata/{layer_name}/legend.html"
     md:
-      title: Slope Steepness
       abstract: Slope steepness data provided by NVE as displayed on Varsom RegObs.
 
   - name: nve_runout_area
     title: Runout Area
     sources: [nve_runout_area_cache]
+    wmts_rest_legendurl: "{base_url}/metadata/{layer_name}/legend.html"
     md:
-      title: Runout Area
       abstract: Runout area data provided by NVE as displayed on Varsom RegObs.
 
 caches:
