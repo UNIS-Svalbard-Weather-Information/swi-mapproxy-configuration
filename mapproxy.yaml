@@ -17,7 +17,8 @@ services:
 layers:
   - name: met_icechart
     title: Latest Ice Chart
-    sources: [icechart_cache]
+    # sources: [icechart_cache]
+    sources: [icechart]
     wmts_rest_legendurl: "{base_url}/metadata/{layer_name}/legend.html"
     md:
         abstract: Latest sea ice chart provided by MET Norway.
@@ -37,11 +38,11 @@ layers:
       abstract: Runout area data provided by NVE as displayed on Varsom RegObs.
 
 caches:
-  icechart_cache:
-    grids: [webmercator]
-    sources: [icechart]
-    type: redis
-    default_ttl: 600
+  # icechart_cache:
+  #   grids: [webmercator]
+  #   sources: [icechart]
+  #   type: redis
+  #   default_ttl: 600
 
   slope_steepness_cache:
     grids: [webmercator]
