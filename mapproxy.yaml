@@ -20,7 +20,9 @@ layers:
     title: Latest Ice Chart
     # sources: [icechart_cache]
     sources: [icechart]
+    legendurl: "{base_url}/metadata/{layer_name}/legend.html"
     wmts_rest_legendurl: "{base_url}/metadata/{layer_name}/legend.html"
+    wmts_kvp_legendurl: "{base_url}/metadata/{layer_name}/legend.html"
     md:
         abstract: Latest sea ice chart provided by MET Norway.
 
