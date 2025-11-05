@@ -25,6 +25,7 @@ layers:
     wmts_kvp_legendurl: "{base_url}/metadata/{layer_name}/legend.html"
     md:
         abstract: Latest sea ice chart provided by MET Norway.
+        legend_html: "{base_url}/metadata/{layer_name}/legend.html"
 
   - name: nve_slope_steepness
     title: Slope Steepness
