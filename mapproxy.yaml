@@ -13,6 +13,7 @@
 services:
   demo:
   wmts:
+  wms:
 
 layers:
   - name: met_icechart
