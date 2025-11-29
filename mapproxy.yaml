@@ -23,8 +23,8 @@ services:
 layers:
   - name: met_icechart
     title: Latest Ice Chart
-    sources: [icechart_cache]
-    # sources: [icechart]
+    # sources: [icechart_cache]
+    sources: [icechart]
     wmts_rest_legendurl: "{base_url}/metadata/{layer_name}/legend.html"
     wmts_kvp_legendurl: "{base_url}/metadata/{layer_name}/legend.html"
     md:
