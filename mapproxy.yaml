@@ -9,7 +9,6 @@
 # - Runout Area from NVE (file cached)
 
 
-
 services:
   demo:
   wmts:
@@ -104,3 +103,6 @@ globals:
       port: $MAPPROXY_REDIS_PORT
       username: $MAPPROXY_REDIS_USERNAME
       password: $MAPPROXY_REDIS_PASSWORD
+  http:
+    headers:
+      access_control_allow_origin: $CORS_ALLOWED_ORIGINS
