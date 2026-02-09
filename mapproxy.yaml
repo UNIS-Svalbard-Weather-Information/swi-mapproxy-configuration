@@ -9,24 +9,15 @@
 # - Runout Area from NVE (file cached)
 
 
-# Define a YAML anchor for the CORS header
-cors_headers: &cors_headers
-  headers:
-    Access-Control-Allow-Origin: $CORS_ALLOWED_ORIGINS
-
 
 services:
   demo:
-    <<: *cors_headers
   wmts:
-    <<: *cors_headers
   wms:
     srs: ["EPSG:3857"]
     image_formats: ["image/png", "image/jpeg"]
     on_source_errors: notify
-    <<: *cors_headers
   tms:
-    <<: *cors_headers
 
 
 layers:
