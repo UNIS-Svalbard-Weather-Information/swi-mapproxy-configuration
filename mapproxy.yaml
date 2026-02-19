@@ -17,13 +17,12 @@ services:
     srs: ["EPSG:3857"]
     image_formats: ["image/png", "image/jpeg"]
     on_source_errors: notify
-  tms:
 
 
 layers:
   - name: met_icechart
     title: Latest Ice Chart
-    sources: [icechart]
+    sources: [icechart_cache]
     wmts_rest_legendurl: "{base_url}/metadata/{layer_name}/legend.html"
     wmts_kvp_legendurl: "{base_url}/metadata/{layer_name}/legend.html"
     md:
@@ -40,7 +39,6 @@ layers:
   - name: avalanche-forecast-1
     title: Today Avalanche Forecast
     sources: [avalanche-forecast-1_cache]
-    # sources: [icechart]
     wmts_rest_legendurl: "{base_url}/metadata/{layer_name}/legend.html"
     wmts_kvp_legendurl: "{base_url}/metadata/{layer_name}/legend.html"
     md:
