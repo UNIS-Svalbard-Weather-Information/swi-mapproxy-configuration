@@ -67,6 +67,10 @@ caches:
     cache:
       type: redis
       default_ttl: 120
+      host: $MAPPROXY_REDIS_HOST
+      port: $MAPPROXY_REDIS_PORT
+      username: $MAPPROXY_REDIS_USERNAME
+      password: $MAPPROXY_REDIS_PASSWORD
 
   avalanche-forecast-0_cache:
     grids: [webmercator]
@@ -74,6 +78,10 @@ caches:
     cache:
       type: redis
       default_ttl: 120
+      host: $MAPPROXY_REDIS_HOST
+      port: $MAPPROXY_REDIS_PORT
+      username: $MAPPROXY_REDIS_USERNAME
+      password: $MAPPROXY_REDIS_PASSWORD
 
   avalanche-forecast-1_cache:
     grids: [webmercator]
@@ -81,6 +89,10 @@ caches:
     cache:
       type: redis
       default_ttl: 120
+      host: $MAPPROXY_REDIS_HOST
+      port: $MAPPROXY_REDIS_PORT
+      username: $MAPPROXY_REDIS_USERNAME
+      password: $MAPPROXY_REDIS_PASSWORD
 
   slope_steepness_cache:
     grids: [webmercator]
@@ -146,12 +158,4 @@ sources:
 
 grids:
     webmercator:
-        base: GLOBAL_WEBMERCATOR    
-
-globals:
-  cache:
-    redis:
-      host: $MAPPROXY_REDIS_HOST
-      port: $MAPPROXY_REDIS_PORT
-      username: $MAPPROXY_REDIS_USERNAME
-      password: $MAPPROXY_REDIS_PASSWORD
+        base: GLOBAL_WEBMERCATOR   
