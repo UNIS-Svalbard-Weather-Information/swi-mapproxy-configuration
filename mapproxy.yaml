@@ -4,7 +4,8 @@
 #
 #
 # This configuration sets up MapProxy to serve and cache the following layers:
-# - Latest Sea Ice Chart from MET Norway (redis cached, 10 min TTL)
+# - Latest Sea Ice Chart from MET Norway (redis cached, 2 min TTL)
+# - Avalanche Forecast for today and tomorow (redis cached, 2min TTL)
 # - Slope Steepness from NVE (file cached)
 # - Runout Area from NVE (file cached)
 
