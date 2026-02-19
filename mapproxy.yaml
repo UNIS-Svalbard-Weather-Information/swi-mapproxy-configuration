@@ -23,7 +23,6 @@ services:
 layers:
   - name: met_icechart
     title: Latest Ice Chart
-    # sources: [icechart_cache]
     sources: [icechart]
     wmts_rest_legendurl: "{base_url}/metadata/{layer_name}/legend.html"
     wmts_kvp_legendurl: "{base_url}/metadata/{layer_name}/legend.html"
@@ -33,7 +32,6 @@ layers:
   - name: avalanche-forecast-0
     title: Today Avalanche Forecast
     sources: [avalanche-forecast-0_cache]
-    # sources: [icechart]
     wmts_rest_legendurl: "{base_url}/metadata/{layer_name}/legend.html"
     wmts_kvp_legendurl: "{base_url}/metadata/{layer_name}/legend.html"
     md:
@@ -66,28 +64,37 @@ caches:
   icechart_cache:
     grids: [webmercator]
     sources: [icechart]
-    type: redis
-    default_ttl: 120
+    cache:
+      type: redis
+      default_ttl: 120
 
   avalanche-forecast-0_cache:
     grids: [webmercator]
     sources: [avalanche-forecast-0]
-    type: redis
-    default_ttl: 120
+    cache:
+      type: redis
+      default_ttl: 120
 
   avalanche-forecast-1_cache:
     grids: [webmercator]
     sources: [avalanche-forecast-1]
-    type: redis
-    default_ttl: 120
+    cache:
+      type: redis
+      default_ttl: 120
 
   slope_steepness_cache:
     grids: [webmercator]
     sources: [nve_slope_steepness]
+    cache:
+      type: mbtiles
+      filename: /mapproxy/mbtiles/slope_steepness_cache.mbtiles
 
   nve_runout_area_cache:
     grids: [webmercator]
     sources: [nve_runout_short]
+    cache:
+      type: mbtiles
+      filename: /mapproxy/mbtiles/nve_runout_area_cache.mbtiles
 
 sources:
   icechart:
@@ -97,19 +104,19 @@ sources:
     transparent: true
     multithreaded: true
 
-    avalanche-forecast-0:
-      type: mapnik
-      mapfile: /mapproxy/data/avalanche-forecast-0/0.xml
-      layers: avalanche_layer
-      transparent: true
-      multithreaded: true
+  avalanche-forecast-0:
+    type: mapnik
+    mapfile: /mapproxy/data/avalanche-forecast-0/0.xml
+    layers: avalanche_layer
+    transparent: true
+    multithreaded: true
 
-    avalanche-forecast-1:
-      type: mapnik
-      mapfile: /mapproxy/data/avalanche-forecast-1/1.xml
-      layers: avalanche_layer
-      transparent: true
-      multithreaded: true
+  avalanche-forecast-1:
+    type: mapnik
+    mapfile: /mapproxy/data/avalanche-forecast-1/1.xml
+    layers: avalanche_layer
+    transparent: true
+    multithreaded: true
 
   nve_slope_steepness:
     type: wms
@@ -148,6 +155,3 @@ globals:
       port: $MAPPROXY_REDIS_PORT
       username: $MAPPROXY_REDIS_USERNAME
       password: $MAPPROXY_REDIS_PASSWORD
-  http:
-    headers:
-      access_control_allow_origin: $CORS_ALLOWED_ORIGINS
