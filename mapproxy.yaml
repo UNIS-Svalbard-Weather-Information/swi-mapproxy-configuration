@@ -30,6 +30,24 @@ layers:
     md:
         abstract: Latest sea ice chart provided by MET Norway.
 
+  - name: avalanche-forecast-0
+    title: Today Avalanche Forecast
+    sources: [avalanche-forecast-0_cache]
+    # sources: [icechart]
+    wmts_rest_legendurl: "{base_url}/metadata/{layer_name}/legend.html"
+    wmts_kvp_legendurl: "{base_url}/metadata/{layer_name}/legend.html"
+    md:
+        abstract: Avalanche Forecast for Nordenskiöld Land for the currect day updated at 00:01 and 15:01 UTC from the Varsom API.
+
+  - name: avalanche-forecast-1
+    title: Today Avalanche Forecast
+    sources: [avalanche-forecast-1_cache]
+    # sources: [icechart]
+    wmts_rest_legendurl: "{base_url}/metadata/{layer_name}/legend.html"
+    wmts_kvp_legendurl: "{base_url}/metadata/{layer_name}/legend.html"
+    md:
+        abstract: Avalanche Forecast for Nordenskiöld Land for the next day updated at 00:01 and 15:01 UTC from the Varsom API.
+
   - name: nve_slope_steepness
     title: Slope Steepness
     sources: [slope_steepness_cache]
@@ -49,7 +67,19 @@ caches:
     grids: [webmercator]
     sources: [icechart]
     type: redis
-    default_ttl: 600
+    default_ttl: 120
+
+  avalanche-forecast-0_cache:
+    grids: [webmercator]
+    sources: [avalanche-forecast-0]
+    type: redis
+    default_ttl: 120
+
+  avalanche-forecast-1_cache:
+    grids: [webmercator]
+    sources: [avalanche-forecast-1]
+    type: redis
+    default_ttl: 120
 
   slope_steepness_cache:
     grids: [webmercator]
@@ -66,6 +96,20 @@ sources:
     layers: latest_ice_chart
     transparent: true
     multithreaded: true
+
+    avalanche-forecast-0:
+      type: mapnik
+      mapfile: /mapproxy/data/avalanche-forecast-0/0.xml
+      layers: avalanche_layer
+      transparent: true
+      multithreaded: true
+
+    avalanche-forecast-1:
+      type: mapnik
+      mapfile: /mapproxy/data/avalanche-forecast-1/1.xml
+      layers: avalanche_layer
+      transparent: true
+      multithreaded: true
 
   nve_slope_steepness:
     type: wms
