@@ -59,10 +59,17 @@ layers:
       abstract: Runout area data provided by NVE as displayed on Varsom RegObs.
 
   - name: nma_nautical_chart
-    title: Runout Area
+    title: Nautical Chart
     sources: [nma_nautical_chart_cache]
     md:
       abstract: Norwegian Mapping Authotity Nautical Chart - NOT FOR NAVIGATION.
+
+  - name: nma_depth_mapping_quality
+    title: Depth Quality
+    sources: [nma_depth_mapping_quality_cache]
+    wmts_rest_legendurl: "{base_url}/metadata/{layer_name}/legend.html"
+    md:
+      abstract: Norwegian Mapping Authotity Nautical Chart Depth Mapping Quality - NOT FOR NAVIGATION.
 
 caches:
   icechart_cache:
@@ -119,6 +126,13 @@ caches:
       type: mbtiles
       filename: /mapproxy/mbtiles/nma_nautical_chart_cache.mbtiles
 
+  nma_depth_mapping_quality_cache:
+    grids: [webmercator]
+    sources: [nma_depth_mapping_quality]
+    cache:
+      type: mbtiles
+      filename: /mapproxy/mbtiles/nma_depth_mapping_quality_cache.mbtiles
+
 sources:
   icechart:
     type: mapnik
@@ -172,6 +186,20 @@ sources:
     req:
       url: https://wms.geonorge.no/skwms1/wms.sjokartraster2?
       layers: all
+      versions: 1.3.0
+      transparent: true
+      format: image/png
+      supported_srs: ['EPSG:25833']
+    on_error:
+      500:
+        response: transparent
+        cache: False
+
+  nma_depth_mapping_quality:
+    type: wms
+    req:
+      url: https://wms.geonorge.no/skwms1/wms.dybdedatakvalitet_navigasjon?
+      layers: Dybdedatakvalitet_sjokart
       versions: 1.3.0
       transparent: true
       format: image/png
