@@ -1,0 +1,59 @@
+name: Validate MapProxy config
+
+# swi-mapproxy clones this repository's main branch every time a container starts and
+# renders mapproxy.yaml with envsubst. A configuration MapProxy cannot load keeps the
+# container from starting, so a merge here can take the map server down at its next
+# restart. This check loads the configuration the same way production does, with the
+# MapProxy version that is actually deployed, before it can be merged.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Validate mapproxy.yaml
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+
+      - name: Find the MapProxy image deployed in production
+        id: image
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/UNIS-Svalbard-Weather-Information/swi-production-deployment/main/compose.yml \
+            > "$RUNNER_TEMP/compose.yml"
+          IMAGE="$(grep -oE 'ghcr.io/unis-svalbard-weather-information/swi-mapproxy:[^[:space:]]+' "$RUNNER_TEMP/compose.yml" | head -n 1)"
+          if [ -z "$IMAGE" ]; then
+            echo "::error::no swi-mapproxy image found in swi-production-deployment compose.yml"
+            exit 1
+          fi
+          echo "Validating against $IMAGE"
+          echo "image=$IMAGE" >> "$GITHUB_OUTPUT"
+
+      # Rendered and loaded inside the production image, so envsubst and MapProxy are the
+      # ones production uses (run.sh substitutes the whole file, like here). The four
+      # variables are the Redis settings the deployment injects; dummy values are enough
+      # because capabilities documents do not connect to Redis.
+      - name: Render and load the configuration
+        env:
+          IMAGE: ${{ steps.image.outputs.image }}
+        run: |
+          docker run --rm \
+            -e MAPPROXY_REDIS_HOST=redis.invalid -e MAPPROXY_REDIS_PORT=6379 \
+            -e MAPPROXY_REDIS_USERNAME=ci -e MAPPROXY_REDIS_PASSWORD=ci \
+            -v "$PWD:/repo:ro" --entrypoint sh "$IMAGE" -c \
+            'envsubst < /repo/mapproxy.yaml > /tmp/mapproxy.yaml && python3 /repo/scripts/validate_config.py /tmp/mapproxy.yaml'
